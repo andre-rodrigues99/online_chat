@@ -13,6 +13,12 @@ public class OracleDb
 
     public OracleConnection StartConnection()
     {
+        Console.WriteLine(url);
+        Console.WriteLine(port);
+        Console.WriteLine(user);
+        Console.WriteLine(passw);
+        Console.WriteLine(service);
+
         if (url is null || port is null || user is null || passw is null || service is null)
         {
             Console.WriteLine("ERRO: Variaveis de ambiente não encontradas!");
