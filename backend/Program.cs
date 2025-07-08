@@ -1,10 +1,16 @@
 
+using Data.OracleDbHandle;
+
 namespace backend;
 
 public class Program
 {
     public static void Main(string[] args)
     {
+        var mig = new OracleDbHandler();
+        //mig.RunMigration();
+
+
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllers();
@@ -23,8 +29,12 @@ public class Program
 
         app.UseAuthorization();
 
-        app.UseWebSockets();
-        
+        var webSocketOptions = new WebSocketOptions
+        {
+            KeepAliveInterval = TimeSpan.FromMinutes(2)
+        };
+        app.UseWebSockets(webSocketOptions);
+
         app.MapControllers();
 
         app.Run();
