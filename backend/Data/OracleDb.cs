@@ -24,7 +24,7 @@ public class OracleDb
             Console.WriteLine("ERRO: Variaveis de ambiente não encontradas!");
         }
 
-        string conn_query = $"User Id={this.user};Password={this.passw};Data Source=//{this.url}:{this.port}/{this.service};";
+        string conn_query = $"User Id={this.user};Password={this.passw};Data Source={this.url}:{this.port}/{this.service};";
         Console.WriteLine(conn_query);
         OracleConnection conn = new OracleConnection(conn_query);
 
