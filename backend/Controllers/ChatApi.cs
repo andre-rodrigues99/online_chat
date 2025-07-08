@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Models.ConnectionHandler;
+using Models.Connection;
 
 namespace Controllers.ChatMessagesControll;
 
@@ -13,7 +13,7 @@ public class ChatMessagesController : ControllerBase
         {
             using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
 
-            await new ConnectionHandler().StartConnection(webSocket);
+            await new Connection().StartConnection(webSocket);
         }
         else
         {
