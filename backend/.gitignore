@@ -1,0 +1,81 @@
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Core
+appsettings.*.json
+appsettings.Development.json
+secrets.json
+
+# Logs
+*.log
+Logs/
+
+# Visual Studio Code
+.vscode/
+.vscode/*
+
+# Rider
+.idea/
+
+# Visual Studio
+.vs/
+*.psess
+*.vsp
+*.vspx
+*.pidb
+*.svclog
+
+# Resharper
+*.DotSettings.user
+
+# TFS
+$tf/
+
+# NuGet
+*.nupkg
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# dotnet CLI
+*.db
+*.deps.json
+*.runtimeconfig.json
+
+# Docker
+**/docker-compose.override.yml
+docker-compose.*
+.docker/
+
+# Test results
+TestResults/
+*.coverage
+*.coveragexml
+*.trx
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.orig
+
+# Others
+*.publishsettings
+*.Publish.xml
+
+# Environment files
+.env
+.env.*
+
+# Local tools config
+.localtoolsettings.json
