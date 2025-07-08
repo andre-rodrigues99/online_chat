@@ -1,22 +1,21 @@
 using System.Net.WebSockets;
-using System.Collections.Concurrent;
-using Models.UsersHandle;
+using ModelsUsers;
 
-namespace Models.ConnectionHandler;
+namespace Models.Connection;
 
-public class ConnectionHandler
+public class Connection
 {
-
-    public async Task Register(WebSocket webSocket)
+    public async Task StartConnection(WebSocket webSocket)
     {
-        UsersHandler.AddUser(webSocket);
+        Users.AddUser(webSocket);
         
         await Channel(webSocket);
     }
 
     private async Task Channel(WebSocket webSocket)
     {
-        Console.WriteLine($"Start Channel {webSocket}"); 
+        Console.WriteLine($"Start Channel - SubProtocol: {webSocket.SubProtocol}"); 
+        Console.WriteLine($"Start Channel - State: {webSocket.State}"); 
 
         var buffer = new byte[1024 * 4];
         var receiveResult = await webSocket.ReceiveAsync(
@@ -36,7 +35,7 @@ public class ConnectionHandler
             if (receiveResult.Count > 0)
             {
                 string msg = System.Text.Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
-                await UsersHandler.SendGlobalMessage(msg);
+                await Users.SendGlobalMessage(msg);
             }
         }
 

@@ -1,26 +1,26 @@
-namespace Models.UsersHandle;
+namespace ModelsUsers;
 
 using System.Net.WebSockets;
 using System.Collections.Concurrent;
 using System.Text;
 
-public static class UsersHandler
+public static class Users
 {
-    private static ConcurrentBag<WebSocket> Users = new ConcurrentBag<WebSocket>();
+    private static ConcurrentBag<WebSocket> UsersPool = new ConcurrentBag<WebSocket>();
 
     public static ConcurrentBag<WebSocket> GetUsers()
     {
-        return UsersHandler.Users;
+        return Users.UsersPool;
     }
 
-    public static void AddUser(WebSocket webSocket)
+    public static void RegisterNew(WebSocket webSocket)
     {
-        UsersHandler.Users.Add(webSocket);
+        Users.UsersPool.Add(webSocket);
     }
 
     public static async Task SendGlobalMessage(string msg)
     {
-        foreach (WebSocket user_socket in UsersHandler.GetUsers())
+        foreach (WebSocket user_socket in Users.GetUsers())
         {
             await user_socket.SendAsync(
                 new ArraySegment<byte>(Encoding.UTF8.GetBytes(msg)),
@@ -30,5 +30,7 @@ public static class UsersHandler
             );
         }
     }
+
+
 }
 
