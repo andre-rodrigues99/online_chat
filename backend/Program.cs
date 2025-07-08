@@ -8,7 +8,7 @@ public class Program
     public static void Main(string[] args)
     {
         var mig = new OracleDb();
-        //mig.RunMigration();
+        mig.RunMigration();
 
 
         var builder = WebApplication.CreateBuilder(args);
