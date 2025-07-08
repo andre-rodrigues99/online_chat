@@ -7,7 +7,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var mig = new OracleDbHandler();
+        var mig = new OracleDb();
         //mig.RunMigration();
 
 
