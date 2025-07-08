@@ -5,7 +5,7 @@ using Oracle.ManagedDataAccess.Client;
 public class OracleDb
 {
     private string? url = Environment.GetEnvironmentVariable("ORACLE_DB_URL");
-    private int? port = int.Parse(Environment.GetEnvironmentVariable("ORACLE_DB_PORT") ?? "0");
+    private string? port = Environment.GetEnvironmentVariable("ORACLE_DB_PORT");
     private string? user = Environment.GetEnvironmentVariable("ORACLE_DB_USER");
     private string? passw = Environment.GetEnvironmentVariable("ORACLE_DB_PASSW");
     private string? service = Environment.GetEnvironmentVariable("ORACLE_DB_SERV_SID");
