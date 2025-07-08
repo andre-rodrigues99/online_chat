@@ -1,21 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net.WebSockets;
-using Models.ChatMessages;
+using Models.ConnectionHandler;
 
 namespace Controllers.ChatMessagesControll;
 
 public class ChatMessagesController : ControllerBase
 {
-    [Route("/chat")]
+    [Route("/ws_chat")]
     public async Task Get()
     {
-        // aceite de ws obrigatório https://learn.microsoft.com/pt-br/aspnet/core/fundamentals/websockets?view=aspnetcore-9.0
+        // aceite do ws
         if (HttpContext.WebSockets.IsWebSocketRequest)
         {
             using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
 
-            var msg_handler = new ChatMessage();
-            msg_handler.EchoWs(webSocket);
+            await new ConnectionHandler().Register(webSocket);
         }
         else
         {
