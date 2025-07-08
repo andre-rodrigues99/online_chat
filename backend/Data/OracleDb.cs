@@ -1,9 +1,8 @@
 namespace Data.OracleDbHandle;
 
 using Oracle.ManagedDataAccess.Client;
-using System;
 
-public class OracleDbHandler
+public class OracleDb
 {
     private string? url = Environment.GetEnvironmentVariable("ORACLE_DB_URL");
     private int? port = int.Parse(Environment.GetEnvironmentVariable("ORACLE_DB_PORT") ?? "0");
@@ -55,5 +54,5 @@ public class OracleDbHandler
         Console.WriteLine("Migração do Banco de Dados Finalizada.");
     }
 
-    
+
 }

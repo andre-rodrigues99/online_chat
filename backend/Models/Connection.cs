@@ -7,7 +7,7 @@ public class Connection
 {
     public async Task StartConnection(WebSocket webSocket)
     {
-        Users.AddUser(webSocket);
+        Users.RegisterNew(webSocket);
         
         await Channel(webSocket);
     }

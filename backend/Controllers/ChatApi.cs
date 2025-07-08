@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
 using Models.Connection;
 
-namespace Controllers.ChatMessagesControll;
+namespace Controllers.ChatApi;
 
-public class ChatMessagesController : ControllerBase
+public class ChatApiController : ControllerBase
 {
     [Route("/ws_chat")]
     public async Task Get()
