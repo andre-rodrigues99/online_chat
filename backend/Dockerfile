@@ -23,7 +23,7 @@ ENV ORACLE_DB_SERV_SID=$ORACLE_DB_SERV_SID
 
 EXPOSE 80
 
-RUN apt-get update && apt-get install -y netcat && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
 
 #ENTRYPOINT ["dotnet", "backend.dll"]
 ENTRYPOINT /bin/sh -c "\
