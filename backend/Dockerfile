@@ -23,11 +23,4 @@ ENV ORACLE_DB_SERV_SID=$ORACLE_DB_SERV_SID
 
 EXPOSE 80
 
-RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
-
-#ENTRYPOINT ["dotnet", "backend.dll"]
-ENTRYPOINT /bin/sh -c "\
-  echo 'Testando conexão com Oracle em $ORACLE_DB_URL:$ORACLE_DB_PORT...'; \
-  nc -z -v -w 5 $ORACLE_DB_URL $ORACLE_DB_PORT || (echo 'Falha na conexão TCP'; exit 1); \
-  echo 'Conexão OK! Iniciando backend...'; \
-  dotnet backend.dll"
+ENTRYPOINT ["dotnet", "backend.dll"]
