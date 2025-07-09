@@ -1,97 +1,9 @@
 <template>
   <q-page class="chat-screen">
-    <!-- Background Effects -->
     <div class="chat-background"></div>
-
-    <!-- Main Chat Layout -->
     <div class="chat-layout">
-      <!-- Sidebar -->
-      <div class="chat-sidebar" :class="{ 'sidebar-mobile-hidden': !showSidebar }">
-        <!-- Sidebar Header -->
-        <div class="sidebar-header">
-          <div class="sidebar-user">
-            <q-avatar size="40px" class="sidebar-avatar">
-              <img src="https://cdn.quasar.dev/img/avatar.png" alt="Avatar">
-            </q-avatar>
-            <div class="sidebar-user-info">
-              <div class="sidebar-user-name">João Silva</div>
-              <div class="sidebar-user-status">Online</div>
-            </div>
-          </div>
-          <q-btn
-            icon="add"
-            flat
-            round
-            dense
-            class="sidebar-add-btn"
-            @click="showNewChatDialog = true"
-          />
-        </div>
-
-        <!-- Search Bar -->
-        <div class="sidebar-search">
-          <q-input
-            v-model="searchQuery"
-            placeholder="Buscar conversas..."
-            outlined
-            dense
-            class="search-input"
-          >
-            <template v-slot:prepend>
-              <q-icon name="search" class="search-icon" />
-            </template>
-          </q-input>
-        </div>
-
-        <!-- Chat List -->
-        <div class="chat-list">
-          <div
-            v-for="chat in filteredChats"
-            :key="chat.id"
-            class="chat-item"
-            :class="{ 'chat-item-active': activeChat?.id === chat.id }"
-            @click="selectChat(chat)"
-          >
-            <q-avatar size="48px" class="chat-avatar">
-              <img :src="chat.avatar" :alt="chat.name">
-              <q-badge
-                v-if="chat.online"
-                color="positive"
-                floating
-                rounded
-                class="chat-online-badge"
-              />
-            </q-avatar>
-            <div class="chat-info">
-              <div class="chat-name">{{ chat.name }}</div>
-              <div class="chat-last-message">{{ chat.lastMessage }}</div>
-            </div>
-            <div class="chat-meta">
-              <div class="chat-time">{{ formatTime(chat.lastMessageTime) }}</div>
-              <q-badge
-                v-if="chat.unreadCount > 0"
-                color="primary"
-                rounded
-                class="chat-unread-badge"
-              >
-                {{ chat.unreadCount }}
-              </q-badge>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Chat Area -->
       <div class="chat-area">
-        <div v-if="!activeChat" class="chat-empty">
-          <div class="empty-illustration">
-            <q-icon name="chat" size="80px" class="empty-icon" />
-          </div>
-          <h3 class="empty-title">Selecione uma conversa</h3>
-          <p class="empty-subtitle">Escolha uma conversa na barra lateral para começar</p>
-        </div>
-
-        <div v-else class="chat-container">
+        <div  class="chat-container">
           <!-- Chat Header -->
           <div class="chat-header">
             <q-btn
@@ -102,32 +14,13 @@
               class="mobile-menu-btn"
               @click="showSidebar = !showSidebar"
             />
-            <div class="chat-header-info">
-              <q-avatar size="40px" class="chat-header-avatar">
-                <img :src="activeChat.avatar" :alt="activeChat.name">
-                <q-badge
-                  v-if="activeChat.online"
-                  color="positive"
-                  floating
-                  rounded
-                  class="chat-online-badge"
-                />
-              </q-avatar>
-              <div class="chat-header-details">
-                <div class="chat-header-name">{{ activeChat.name }}</div>
-                <div class="chat-header-status">
-                  {{ activeChat.online ? 'Online' : 'Offline' }}
-                </div>
-              </div>
-            </div>
+
             <div class="chat-header-actions">
               <q-btn icon="videocam" flat round dense class="header-action-btn" />
               <q-btn icon="call" flat round dense class="header-action-btn" />
               <q-btn icon="more_vert" flat round dense class="header-action-btn" />
             </div>
           </div>
-
-          <!-- Messages Container -->
           <div class="messages-container" ref="messagesContainer">
             <div class="messages-list">
               <div
@@ -226,21 +119,19 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, getCurrentInstance, nextTick } from 'vue'
 import { useQuasar } from 'quasar'
+import { useWebSocketStore } from 'src/stores/webSocketStore'
 
 const $q = useQuasar()
-
-// Reactive data
-const showSidebar = ref(true)
 const searchQuery = ref('')
-const activeChat = ref(null)
 const newMessage = ref('')
 const showNewChatDialog = ref(false)
 const newChatName = ref('')
 const messagesContainer = ref(null)
+const { appContext } = getCurrentInstance()
+const webSocketStore = useWebSocketStore();
 
-// Mock data
 const chats = ref([
   {
     id: 1,
@@ -250,33 +141,6 @@ const chats = ref([
     lastMessageTime: new Date(Date.now() - 5 * 60 * 1000),
     unreadCount: 2,
     online: true
-  },
-  {
-    id: 2,
-    name: 'Pedro Costa',
-    avatar: 'https://cdn.quasar.dev/img/avatar3.jpg',
-    lastMessage: 'Vamos nos encontrar hoje?',
-    lastMessageTime: new Date(Date.now() - 30 * 60 * 1000),
-    unreadCount: 0,
-    online: false
-  },
-  {
-    id: 3,
-    name: 'Ana Silva',
-    avatar: 'https://cdn.quasar.dev/img/avatar4.jpg',
-    lastMessage: 'Obrigada pela ajuda!',
-    lastMessageTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    unreadCount: 1,
-    online: true
-  },
-  {
-    id: 4,
-    name: 'Carlos Oliveira',
-    avatar: 'https://cdn.quasar.dev/img/avatar5.jpg',
-    lastMessage: 'Até logo!',
-    lastMessageTime: new Date(Date.now() - 24 * 60 * 60 * 1000),
-    unreadCount: 0,
-    online: false
   }
 ])
 
@@ -286,43 +150,8 @@ const messages = ref([
     content: 'Olá! Tudo bem?',
     timestamp: new Date(Date.now() - 10 * 60 * 1000),
     isOwn: false
-  },
-  {
-    id: 2,
-    content: 'Oi! Tudo ótimo e você?',
-    timestamp: new Date(Date.now() - 8 * 60 * 1000),
-    isOwn: true
-  },
-  {
-    id: 3,
-    content: 'Também estou bem! Obrigada por perguntar 😊',
-    timestamp: new Date(Date.now() - 5 * 60 * 1000),
-    isOwn: false
-  },
-  {
-    id: 4,
-    content: 'Que bom! Vamos nos falar mais tarde?',
-    timestamp: new Date(Date.now() - 2 * 60 * 1000),
-    isOwn: true
   }
 ])
-
-// Computed
-const filteredChats = computed(() => {
-  if (!searchQuery.value) return chats.value
-  return chats.value.filter(chat =>
-    chat.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-})
-
-// Methods
-const selectChat = (chat) => {
-  activeChat.value = chat
-  chat.unreadCount = 0
-  if (window.innerWidth < 768) {
-    showSidebar.value = false
-  }
-}
 
 const sendMessage = () => {
   if (!newMessage.value.trim()) return
@@ -333,29 +162,14 @@ const sendMessage = () => {
     timestamp: new Date(),
     isOwn: true
   }
+  webSocketStore.sendMessage(message.content)
 
   messages.value.push(message)
   newMessage.value = ''
 
-  // Scroll to bottom
   nextTick(() => {
     scrollToBottom()
   })
-
-  // Simulate response
-  setTimeout(() => {
-    const response = {
-      id: Date.now() + 1,
-      content: 'Obrigado pela mensagem! 👍',
-      timestamp: new Date(),
-      isOwn: false
-    }
-    messages.value.push(response)
-
-    nextTick(() => {
-      scrollToBottom()
-    })
-  }, 1000)
 }
 
 const scrollToBottom = () => {
@@ -404,22 +218,18 @@ const createNewChat = () => {
   })
 }
 
-// Handle responsive behavior
-const handleResize = () => {
-  if (window.innerWidth >= 768) {
-    showSidebar.value = true
-  }
-}
 
 onMounted(() => {
-  window.addEventListener('resize', handleResize)
-  handleResize()
-
-  // Select first chat by default
-  if (chats.value.length > 0) {
-    selectChat(chats.value[0])
-  }
+  //webSocketStore.defineConnection();
+  //webSocketStore.startConnection();
+  console.log('a')
 })
+
+onBeforeUnmount(() => {
+  //webSocketStore.closeConnection();
+  console.log('a')
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -446,29 +256,6 @@ onMounted(() => {
 .chat-layout {
   display: flex;
   height: 100vh;
-}
-
-// Sidebar
-.chat-sidebar {
-  width: 320px;
-  background: rgba(255, 255, 255, 0.05);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease;
-
-  @media (max-width: 767px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 100;
-
-    &.sidebar-mobile-hidden {
-      transform: translateX(-100%);
-    }
-  }
 }
 
 .sidebar-header {
