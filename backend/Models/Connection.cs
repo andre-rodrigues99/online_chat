@@ -32,11 +32,11 @@ public class Connection
             receiveResult = await webSocket.ReceiveAsync(
                 new ArraySegment<byte>(buffer), CancellationToken.None);
 
-            if (receiveResult.Count > 0)
-            {
-                string msg = System.Text.Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
-                await Users.SendGlobalMessage(msg);
-            }
+            //if (receiveResult.Count > 0)
+            //{
+            //    string msg = System.Text.Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
+            //    await Users.SendGlobalMessage(msg);
+            //}
         }
 
         await webSocket.CloseAsync(
