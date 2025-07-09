@@ -1,15 +1,13 @@
 import { defineStore } from 'pinia';
-import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
-import { sendMessage } from '@microsoft/signalr/dist/esm/Utils';
+import { useMessageStore } from './messageStore';
 
-const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL?.replace(/"/g, '') ?? '';
-const CHAT_API = import.meta.env.VITE_CHAT_API?.replace(/"/g, '') ?? '';
-
+const BACKEND_BASE_URL =  "http://localhost:5098";//import.meta.env.VITE_BACKEND_BASE_URL?.replace(/"/g, '') ?? '';
+const CHAT_API = "/ws_chat"; //import.meta.env.VITE_CHAT_API?.replace(/"/g, '') ?? '';
 
 export const useWebSocketStore = defineStore('websocket', {
   state: () => ({
     connected: false,
-    connection: null as HubConnection | null
+    connection: null as WebSocket | null
   }),
 
   getters: {
@@ -22,20 +20,34 @@ export const useWebSocketStore = defineStore('websocket', {
   },
 
   actions: {
-    defineConnection() {
-      this.connection = new HubConnectionBuilder()
-        .withUrl(`${BACKEND_BASE_URL}${CHAT_API}`)
-        .withAutomaticReconnect()
-        .build();
-    },
     async startConnection() {
-      if (this.connection == null || this.connected) {
+      if (this.connection != null && this.connected) {
         return
       }
 
       try {
-        await this.connection.start();
+        const messageStore = useMessageStore();
+
+        this.connection = new WebSocket(
+          `${BACKEND_BASE_URL}${CHAT_API}`
+          );
         this.connected = true;
+
+        this.connection.onmessage = (event) => {
+          console.log("aa")
+          const msg = (event.data);
+
+          console.log(event.AT_TARGET)
+          console.log(event.BUBBLING_PHASE)
+          console.log(event.CAPTURING_PHASE)
+          console.log(event.bubbles)
+          console.log(event.cancelable)
+
+          if (msg.type === 'ack' || msg.type === 'pong' || msg.confirmation === true) {
+            return;
+          }
+          messageStore.addMessage(msg)
+          };
       } catch (err) {
         return
       }
@@ -45,10 +57,11 @@ export const useWebSocketStore = defineStore('websocket', {
       if (this.connection == null || !this.connected) {
         return
       }
-      this.connection.stop();
+      this.connection.close();
       this.connected = false;
     },
     sendMessage(msg: string) {
+      console.log(msg)
       if (this.connection != null && this.connected) {
         this.connection.send(msg);
       }

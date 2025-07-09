@@ -1,5 +1,4 @@
-
-using Data.OracleDbHandle;
+using CorsRules;
 
 namespace backend;
 
@@ -10,15 +9,25 @@ public class Program
         //var mig = new OracleDb();
         //mig.RunMigration();
 
+        WebApplication app = BuildApp();
+        ConfigureApp(app);
+        app.Run();
+    }
 
-        var builder = WebApplication.CreateBuilder(args);
+    private static WebApplication BuildApp()
+    {
+        WebApplicationBuilder builder = WebApplication.CreateBuilder();
 
+        builder = Cors.Add(builder);
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        var app = builder.Build();
+        return builder.Build();
+    }
 
+    private static WebApplication ConfigureApp(WebApplication app)
+    {
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -26,7 +35,6 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
         app.UseAuthorization();
 
         var webSocketOptions = new WebSocketOptions
@@ -37,6 +45,8 @@ public class Program
 
         app.MapControllers();
 
-        app.Run();
+        app = Cors.Start(app);
+
+        return app;
     }
 }

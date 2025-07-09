@@ -1,6 +1,7 @@
 namespace Data.OracleDbHandle;
 
 using Oracle.ManagedDataAccess.Client;
+using Data.MigrationDb;
 
 public class OracleDb
 {
@@ -43,15 +44,7 @@ public class OracleDb
         Console.WriteLine("Inicializando Migração do Banco de Dados.");
         var conn = StartConnection();
 
-        string sql = @"CREATE TABLE messages (
-                                                msg_id NUMBER
-                                                msg_time TIMESTAMP, 
-                                                msg_from VARCHAR2, 
-                                                msg_to VARCHAR2, 
-                                                msg_text TEXT
-                                            )";
-
-        OracleCommand query = new OracleCommand(sql, conn);
+        OracleCommand query = new OracleCommand(new Migration().migration_query(), conn);
 
         query.ExecuteNonQuery();
         conn.Commit();

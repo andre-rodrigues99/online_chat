@@ -122,36 +122,17 @@
 import { ref, computed, onMounted, onBeforeUnmount, getCurrentInstance, nextTick } from 'vue'
 import { useQuasar } from 'quasar'
 import { useWebSocketStore } from 'src/stores/webSocketStore'
+import { useMessageStore } from 'src/stores/messageStore'
 
 const $q = useQuasar()
-const searchQuery = ref('')
 const newMessage = ref('')
 const showNewChatDialog = ref(false)
 const newChatName = ref('')
 const messagesContainer = ref(null)
-const { appContext } = getCurrentInstance()
 const webSocketStore = useWebSocketStore();
+const messageStore = useMessageStore();
 
-const chats = ref([
-  {
-    id: 1,
-    name: 'Maria Santos',
-    avatar: 'https://cdn.quasar.dev/img/avatar2.jpg',
-    lastMessage: 'Olá! Como você está?',
-    lastMessageTime: new Date(Date.now() - 5 * 60 * 1000),
-    unreadCount: 2,
-    online: true
-  }
-])
-
-const messages = ref([
-  {
-    id: 1,
-    content: 'Olá! Tudo bem?',
-    timestamp: new Date(Date.now() - 10 * 60 * 1000),
-    isOwn: false
-  }
-])
+const messages = messageStore.getMessages;
 
 const sendMessage = () => {
   if (!newMessage.value.trim()) return
@@ -163,9 +144,7 @@ const sendMessage = () => {
     isOwn: true
   }
   webSocketStore.sendMessage(message.content)
-
-  messages.value.push(message)
-  newMessage.value = ''
+  messageStore.addOwnMessage(message.content)
 
   nextTick(() => {
     scrollToBottom()
@@ -196,18 +175,6 @@ const formatTime = (date) => {
 const createNewChat = () => {
   if (!newChatName.value.trim()) return
 
-  const newChat = {
-    id: Date.now(),
-    name: newChatName.value,
-    avatar: 'https://cdn.quasar.dev/img/avatar.png',
-    lastMessage: 'Nova conversa iniciada',
-    lastMessageTime: new Date(),
-    unreadCount: 0,
-    online: Math.random() > 0.5
-  }
-
-  chats.value.unshift(newChat)
-  newChatName.value = ''
   showNewChatDialog.value = false
 
   $q.notify({
@@ -220,14 +187,11 @@ const createNewChat = () => {
 
 
 onMounted(() => {
-  //webSocketStore.defineConnection();
-  //webSocketStore.startConnection();
-  console.log('a')
+  webSocketStore.startConnection();
 })
 
 onBeforeUnmount(() => {
-  //webSocketStore.closeConnection();
-  console.log('a')
+  webSocketStore.closeConnection();
 })
 
 </script>
