@@ -8,10 +8,12 @@ public class Cors()
         {
             options.AddPolicy("CorsPolicy", policy =>
             {
-                policy.WithOrigins("http://localhost:9000")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials();
+                policy.WithOrigins(
+                                "http://localhost:9000",
+                                "https://online-chat.up.railway.app")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod()
+                      .AllowCredentials();
             });
         });
         return builder;
