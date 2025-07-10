@@ -1,52 +1,55 @@
 using System.Net.WebSockets;
 using ModelsUsers;
 using Models.ChatHandler;
-using Models.Messages;
+using System.Text;
 
 namespace Models.Connection;
 
+
 public class Connection
 {
+    private StringBuilder accumulatedData = new StringBuilder();
     public async Task StartConnection(WebSocket webSocket)
     {
         Users.RegisterNew(new User("name", webSocket));
-        
+
         await Channel(webSocket);
     }
 
     private async Task Channel(WebSocket webSocket)
     {
-        Console.WriteLine($"Start Channel - SubProtocol: {webSocket.SubProtocol}"); 
-        Console.WriteLine($"Start Channel - State: {webSocket.State}"); 
+        Console.WriteLine($"Start Channel - SubProtocol: {webSocket.SubProtocol}");
+        Console.WriteLine($"Start Channel - State: {webSocket.State}");
 
-        var buffer = new byte[1024 * 4];
+        var buffer = new byte[1024 * 4];        
         var receiveResult = await webSocket.ReceiveAsync(
             new ArraySegment<byte>(buffer), CancellationToken.None);
 
-        while (!receiveResult.CloseStatus.HasValue)
+        while (webSocket.State == WebSocketState.Open)
         {
-            await webSocket.SendAsync(
-                new ArraySegment<byte>(buffer, 0, receiveResult.Count),
-                receiveResult.MessageType,
-                receiveResult.EndOfMessage,
-                CancellationToken.None);
-
             receiveResult = await webSocket.ReceiveAsync(
                 new ArraySegment<byte>(buffer), CancellationToken.None);
 
             if (receiveResult.Count > 0)
             {
-                Console.WriteLine(webSocket.GetHashCode());
-
-                int id = Users.GetId(webSocket);
-                Message msg = new Message(id, System.Text.Encoding.UTF8.GetString(buffer, 0, receiveResult.Count));
-                new Chat().ChatHandle(msg);
+                new Chat().ChatHandle(Encoding.UTF8.GetString(buffer, 0, receiveResult.Count), webSocket);
             }
+
         }
 
-        await webSocket.CloseAsync(
-            receiveResult.CloseStatus.Value,
-            receiveResult.CloseStatusDescription,
-            CancellationToken.None);
+        if (receiveResult.CloseStatus.HasValue)
+        {
+            await webSocket.CloseAsync(
+                receiveResult.CloseStatus.Value,
+                receiveResult.CloseStatusDescription,
+                CancellationToken.None);
+        }
+        else
+        {
+            await webSocket.CloseAsync(
+                WebSocketCloseStatus.NormalClosure,
+                "Closed by server",
+                CancellationToken.None);
+        }
     }
 }

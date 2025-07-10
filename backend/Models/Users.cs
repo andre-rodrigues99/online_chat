@@ -2,7 +2,6 @@ namespace ModelsUsers;
 
 using System.Net.WebSockets;
 using System.Collections.Concurrent;
-using Microsoft.OpenApi.Services;
 
 public class User
 {
