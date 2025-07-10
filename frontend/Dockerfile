@@ -21,6 +21,9 @@ COPY --from=build-stage /app/dist/spa /usr/share/nginx/html
 COPY /nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY /nginx/nginx.conf /etc/nginx/nginx.conf
 
+ARG VITE_CHAT_API
+ARG VITE_BASE_URL
+
 ENV VITE_CHAT_API=$VITE_CHAT_API
 ENV VITE_BASE_URL=$VITE_BASE_URL
 
