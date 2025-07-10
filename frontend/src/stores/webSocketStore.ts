@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { useMessageStore } from './messageStore';
 
-const BASE_URL =  import.meta.env.VITE_BASE_URL?.replace(/"/g, '') ?? 'http://localhost:5098';
+const BASE_URL =  import.meta.env.VITE_BASE_URL?.replace(/"/g, '') ?? 'https://online-chat-backend.up.railway.app';
 const CHAT_API = import.meta.env.VITE_CHAT_API?.replace(/"/g, '') ?? '/ws_chat';
 
 export const useWebSocketStore = defineStore('websocket', {
@@ -32,6 +32,9 @@ export const useWebSocketStore = defineStore('websocket', {
           `${BASE_URL}${CHAT_API}`
           );
         this.connected = true;
+
+        console.log(BASE_URL)
+        console.log(CHAT_API)
 
         this.connection.onmessage = (event) => {
 
