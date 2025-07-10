@@ -145,10 +145,8 @@ const sendMessage = () => {
   }
   webSocketStore.sendMessage(message.content)
   messageStore.addOwnMessage(message)
-
-  nextTick(() => {
-    scrollToBottom()
-  })
+  scrollToBottom()
+  newMessage.value = "";
 }
 
 const scrollToBottom = () => {

@@ -11,7 +11,7 @@ RUN npm install -g @vue/cli
 RUN npm install -g @quasar/cli@latest
 
 ENV VITE_CHAT_API=$VITE_CHAT_API
-ENV VITE_BACKEND_BASE_URL=$VITE_BACKEND_BASE_URL
+ENV VITE_BASE_URL=$VITE_BASE_URL
 
 RUN CI=true npx quasar build -m spa && \ 
     npm cache clean --force && \ 

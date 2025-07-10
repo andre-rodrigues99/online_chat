@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia';
 import { useMessageStore } from './messageStore';
-import { Message } from 'primevue';
 
-const BACKEND_BASE_URL =  "http://localhost:5098";//import.meta.env.VITE_BACKEND_BASE_URL?.replace(/"/g, '') ?? '';
-const CHAT_API = "/ws_chat"; //import.meta.env.VITE_CHAT_API?.replace(/"/g, '') ?? '';
+const BASE_URL =  import.meta.env.VITE_BASE_URL?.replace(/"/g, '') ?? 'http://localhost:5098';
+const CHAT_API = import.meta.env.VITE_CHAT_API?.replace(/"/g, '') ?? '/ws_chat';
 
 export const useWebSocketStore = defineStore('websocket', {
   state: () => ({
@@ -30,18 +29,22 @@ export const useWebSocketStore = defineStore('websocket', {
         const messageStore = useMessageStore();
 
         this.connection = new WebSocket(
-          `${BACKEND_BASE_URL}${CHAT_API}`
+          `${BASE_URL}${CHAT_API}`
           );
         this.connected = true;
 
         this.connection.onmessage = (event) => {
-          console.log("aa")
+
+          const data = event.data;
+
+          console.log(data)
 
           const message = {
-            id: Date.now(),
-            content: event.data,
-            timestamp: new Date(),
-            isOwn: true
+            id: data.id,
+            session_id: data.session_id,
+            content: data.content,
+            timestamp: data.timestamp,
+            isOwn: data.isOwn
           }
 
           messageStore.addMessage(message)
@@ -59,7 +62,6 @@ export const useWebSocketStore = defineStore('websocket', {
       this.connected = false;
     },
     sendMessage(msg: string) {
-      console.log(msg)
       if (this.connection != null && this.connected) {
         this.connection.send(msg);
       }

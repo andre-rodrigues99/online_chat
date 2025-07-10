@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 
 export interface Message {
       id: number,
+      session_id: number,
       content: string,
       timestamp: Date,
       isOwn: boolean
@@ -21,6 +22,7 @@ export const useMessageStore = defineStore('messages', {
     addOwnMessage(msg: Message) {
       this.messages.push({
         id: msg.id,
+        session_id: 0,
         content: msg.content,
         timestamp: msg.timestamp,
         isOwn: true
@@ -30,6 +32,7 @@ export const useMessageStore = defineStore('messages', {
     addMessage(msg: Message) {
       this.messages.push({
         id: msg.id,
+        session_id: msg.session_id,
         content: msg.content,
         timestamp: msg.timestamp,
         isOwn: false

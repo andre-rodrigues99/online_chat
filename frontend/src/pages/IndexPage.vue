@@ -248,7 +248,6 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const $q = useQuasar()
 
-// Reactive data
 const scrollY = ref(0)
 const showLoginDialog = ref(false)
 const email = ref('')
