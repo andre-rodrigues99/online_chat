@@ -18,20 +18,21 @@ export const useMessageStore = defineStore('messages', {
     }
   },
   actions: {
-    addOwnMessage(content: string) {
+    addOwnMessage(msg: Message) {
       this.messages.push({
-        id: Date.now(),
-        content,
-        timestamp: new Date(),
+        id: msg.id,
+        content: msg.content,
+        timestamp: msg.timestamp,
         isOwn: true
       })
     },
 
     addMessage(msg: Message) {
       this.messages.push({
-        ...msg,
-        isOwn: false,
-        timestamp: new Date(msg.timestamp)
+        id: msg.id,
+        content: msg.content,
+        timestamp: msg.timestamp,
+        isOwn: false
       })
     }
   }

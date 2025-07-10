@@ -144,7 +144,7 @@ const sendMessage = () => {
     isOwn: true
   }
   webSocketStore.sendMessage(message.content)
-  messageStore.addOwnMessage(message.content)
+  messageStore.addOwnMessage(message)
 
   nextTick(() => {
     scrollToBottom()

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { useMessageStore } from './messageStore';
+import { Message } from 'primevue';
 
 const BACKEND_BASE_URL =  "http://localhost:5098";//import.meta.env.VITE_BACKEND_BASE_URL?.replace(/"/g, '') ?? '';
 const CHAT_API = "/ws_chat"; //import.meta.env.VITE_CHAT_API?.replace(/"/g, '') ?? '';
@@ -35,18 +36,15 @@ export const useWebSocketStore = defineStore('websocket', {
 
         this.connection.onmessage = (event) => {
           console.log("aa")
-          const msg = (event.data);
 
-          console.log(event.AT_TARGET)
-          console.log(event.BUBBLING_PHASE)
-          console.log(event.CAPTURING_PHASE)
-          console.log(event.bubbles)
-          console.log(event.cancelable)
-
-          if (msg.type === 'ack' || msg.type === 'pong' || msg.confirmation === true) {
-            return;
+          const message = {
+            id: Date.now(),
+            content: event.data,
+            timestamp: new Date(),
+            isOwn: true
           }
-          messageStore.addMessage(msg)
+
+          messageStore.addMessage(message)
           };
       } catch (err) {
         return
