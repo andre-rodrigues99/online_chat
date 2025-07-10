@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
-import { useMessageStore } from './messageStore';
+import { SendMessage, useMessageStore } from './messageStore';
 
-const BASE_URL =  import.meta.env.VITE_BASE_URL?.replace(/"/g, '') ?? 'https://online-chat-backend.up.railway.app';
+const BASE_URL =  import.meta.env.VITE_BASE_URL?.replace(/"/g, '') ?? 'http://localhost:5098'//'https://online-chat-backend.up.railway.app';
 const CHAT_API = import.meta.env.VITE_CHAT_API?.replace(/"/g, '') ?? '/ws_chat';
 
 export const useWebSocketStore = defineStore('websocket', {
@@ -33,14 +33,15 @@ export const useWebSocketStore = defineStore('websocket', {
         this.connected = true;
 
         this.connection.onmessage = (event) => {
-          const data = event.data;
+          const data = JSON.parse(event.data);
+          console.log(data)
 
           const message = {
             id: data.id,
-            session_id: data.session_id,
+            session_id: 0,
             content: data.content,
             timestamp: data.timestamp,
-            isOwn: data.isOwn
+            isOwn: false
           }
 
           messageStore.addMessage(message)
@@ -58,9 +59,9 @@ export const useWebSocketStore = defineStore('websocket', {
       this.connection.close();
       this.connected = false;
     },
-    sendMessage(msg: string) {
+    sendMessage(msg: SendMessage) {
       if (this.connection != null && this.connected) {
-        this.connection.send(msg);
+        this.connection.send(new TextEncoder().encode(JSON.stringify(msg)));
       }
     }
   }

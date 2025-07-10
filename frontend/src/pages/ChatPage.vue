@@ -131,6 +131,7 @@ const newChatName = ref('')
 const messagesContainer = ref(null)
 const webSocketStore = useWebSocketStore();
 const messageStore = useMessageStore();
+const activeChat = ref(0);
 
 const messages = messageStore.getMessages;
 
@@ -140,10 +141,16 @@ const sendMessage = () => {
   const message = {
     id: Date.now(),
     content: newMessage.value,
-    timestamp: new Date(),
+    timestamp: Math.floor(Date.now() / 1000),
     isOwn: true
   }
-  webSocketStore.sendMessage(message.content)
+  const sent_message = {
+    msg_to: activeChat.value,
+    content: newMessage.value,
+    timestamp: Math.floor(Date.now() / 1000)
+  }
+
+  webSocketStore.sendMessage(sent_message)
   messageStore.addOwnMessage(message)
   scrollToBottom()
   newMessage.value = "";
@@ -155,7 +162,8 @@ const scrollToBottom = () => {
   }
 }
 
-const formatTime = (date) => {
+const formatTime = (timestamp) => {
+  const date = new Date(timestamp * 1000)
   const now = new Date()
   const diff = now - date
   const hours = Math.floor(diff / (1000 * 60 * 60))
@@ -169,6 +177,7 @@ const formatTime = (date) => {
     return `${minutes}m`
   }
 }
+
 
 const createNewChat = () => {
   if (!newChatName.value.trim()) return
@@ -186,7 +195,6 @@ const createNewChat = () => {
 
 onMounted(() => {
   webSocketStore.startConnection();
-  console.log('pos conexao')
 })
 
 onBeforeUnmount(() => {

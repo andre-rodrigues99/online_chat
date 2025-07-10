@@ -8,6 +8,12 @@ export interface Message {
       isOwn: boolean
 }
 
+export interface SendMessage {
+      msg_to: number
+      content: string,
+      timestamp: Date,
+}
+
 export const useMessageStore = defineStore('messages', {
   state: (): { messages: Message[] } => ({
       messages: []
