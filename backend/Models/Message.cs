@@ -63,9 +63,13 @@ public class Message
         string pattern_suspect = @"xp_cmdshell|\bOR\b\s+\d+=\d+|\b(SELECT|UNION|INSERT|UPDATE|DELETE|DROP|ALTER|EXEC|CREATE|TRUNCATE|MERGE)\b|--|;|'|\*";
         string sanitized_msg = msg;
 
-        sanitized_msg = Regex.Replace(sanitized_msg, pattern_bad_words, "*");
-        sanitized_msg = Regex.Replace(sanitized_msg, pattern_injection, String.Empty);
-        sanitized_msg = Regex.Replace(sanitized_msg, pattern_suspect, String.Empty);
+        var regex_bad_words = new Regex(pattern_bad_words, RegexOptions.IgnoreCase);
+        var regex_injection = new Regex(pattern_injection, RegexOptions.IgnoreCase);
+        var regex_suspect = new Regex(pattern_suspect, RegexOptions.IgnoreCase);
+
+        sanitized_msg = regex_bad_words.Replace(sanitized_msg, "*");
+        sanitized_msg = regex_injection.Replace(sanitized_msg, String.Empty);
+        sanitized_msg = regex_suspect.Replace(sanitized_msg, String.Empty);
 
         if (sanitized_msg.Length > 250)
         {

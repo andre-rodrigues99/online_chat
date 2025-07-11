@@ -9,7 +9,7 @@
     >
       <q-toolbar class="nav-toolbar">
         <q-toolbar-title class="nav-title">
-          ChaChaChat
+          Online Chat
         </q-toolbar-title>
 
         <div class="desktop-menu">

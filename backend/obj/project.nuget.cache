@@ -1,12 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "es4ZHmna+Jo=",
+  "dgSpecHash": "RHlhv+eYvhM=",
   "success": true,
   "projectFilePath": "C:\\Users\\f200409\\Documents\\Github\\online_chat_rs\\backend\\backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\f200409\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.20\\microsoft.aspnetcore.openapi.7.0.20.nupkg.sha512",
     "C:\\Users\\f200409\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\f200409\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\f200409\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
     "C:\\Users\\f200409\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
+    "C:\\Users\\f200409\\.nuget\\packages\\npgsql\\9.0.3\\npgsql.9.0.3.nupkg.sha512",
     "C:\\Users\\f200409\\.nuget\\packages\\oracle.manageddataaccess.core\\23.9.0\\oracle.manageddataaccess.core.23.9.0.nupkg.sha512",
     "C:\\Users\\f200409\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
     "C:\\Users\\f200409\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
