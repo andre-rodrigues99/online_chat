@@ -11,7 +11,7 @@ export interface Message {
 export interface SendMessage {
       msg_to: number
       content: string,
-      timestamp: Date,
+      timestamp: number,
 }
 
 export const useMessageStore = defineStore('messages', {
