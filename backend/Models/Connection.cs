@@ -1,5 +1,5 @@
 using System.Net.WebSockets;
-using ModelsUsers;
+using Models.UserModels;
 using Models.ChatHandler;
 using System.Text;
 

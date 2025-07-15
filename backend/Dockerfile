@@ -9,7 +9,7 @@ RUN dotnet restore
 COPY . ./
 RUN dotnet publish -c Release -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:latest AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS base
 
 WORKDIR /app
 

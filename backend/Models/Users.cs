@@ -1,4 +1,4 @@
-namespace ModelsUsers;
+namespace Models.UserModels;
 
 using System.Net.WebSockets;
 using System.Collections.Concurrent;

@@ -2,7 +2,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using Models.Messages;
-using ModelsUsers;
+using Models.UserModels;
 
 namespace Models.ChatHandler;
 
